@@ -1,5 +1,0 @@
-
-flask
-google-cloud-texttospeech
-requests
-gunicorn
