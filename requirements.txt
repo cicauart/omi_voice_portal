@@ -1,5 +1,6 @@
 
 flask
-google-cloud-texttospeech
-requests
 gunicorn
+requests
+google-generativeai
+google-cloud-texttospeech
