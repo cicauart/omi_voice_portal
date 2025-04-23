@@ -4,3 +4,4 @@ gunicorn
 requests
 google-generativeai
 google-cloud-texttospeech
+firebase-admin
