@@ -37,7 +37,7 @@ def index():
         print("📩 MENSAJE RECIBIDO:", mensaje)
 
         try:
-            modelo = genai.GenerativeModel("gemini-pro")
+            modelo = genai.GenerativeModel("gemini-pro-1.0")
             result = modelo.generate_content(f"Explicá el tema si alguien dice: '{mensaje}'. Sugerí 2 respuestas inteligentes.")
             respuesta = result.text
             print("🧠 RESPUESTA GEMINI:", respuesta)
