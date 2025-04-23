@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # 🔐 Clave API de Gemini desde variables de entorno
-GEMINI_API_KEY = os.getenv("AIzaSyD3Q_aku2VflGthDZm6v8Exep9_pbugo-k")
+GEMINI_API_KEY = os.getenv("AIzaSyCRAOeeqBmLiKk0-kdfkaSLULDalAyoLzM")
 GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
 
 # 📁 Ruta al archivo de credenciales de Google TTS
