@@ -2,6 +2,13 @@ from flask import Flask, request, render_template, jsonify
 from google.cloud import texttospeech
 import google.generativeai as genai
 import os
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate("/etc/secrets/firebase_service_key.json")
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 # 🌐 Configurar Flask
 app = Flask(__name__)
