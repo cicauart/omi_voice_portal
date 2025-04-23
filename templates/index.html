@@ -1,22 +1,58 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>OMI Voice Portal</title>
+  <meta charset="UTF-8">
+  <title>OMI Voice Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #000; color: #0f0; }
+    button { padding: 12px 24px; font-size: 18px; margin-top: 20px; }
+    audio { margin-top: 20px; }
+  </style>
 </head>
-<body style="font-family: Arial; text-align: center; padding-top: 50px;">
-    <h1>OMI Voice Portal</h1>
-    <form method="POST">
-        <input type="text" name="mensaje" placeholder="¿Qué escuchaste?" style="width: 300px; padding: 10px;" required>
-        <button type="submit" style="padding: 10px;">Enviar</button>
-    </form>
-    {% if respuesta %}
-    <h3>Respuesta:</h3>
-    <p>{{ respuesta }}</p>
-    <audio controls autoplay>
-        <source src="{{ url_for('static', filename='respuesta.mp3') }}" type="audio/mpeg">
-        Tu navegador no soporta audio.
-    </audio>
-    {% endif %}
+<body>
+  <h1>🧠 Habla con tu asistente</h1>
+  <p id="estado">Presiona el botón y hablá...</p>
+  <button onclick="escuchar()">🎙️ Hablar</button>
+  <audio id="audioRespuesta" controls hidden></audio>
+
+  <script>
+    function escuchar() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = "es-ES";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      document.getElementById("estado").innerText = "🎧 Escuchando...";
+
+      recognition.onresult = function(event) {
+        const mensaje = event.results[0][0].transcript;
+        document.getElementById("estado").innerText = "📤 Enviando: " + mensaje;
+
+        fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "mensaje=" + encodeURIComponent(mensaje)
+        })
+        .then(res => res.text())
+        .then(() => {
+          const audio = document.getElementById("audioRespuesta");
+          audio.src = "/static/respuesta.mp3";
+          audio.hidden = false;
+          audio.play();
+          document.getElementById("estado").innerText = "🔊 Reproduciendo respuesta";
+        })
+        .catch(err => {
+          document.getElementById("estado").innerText = "⚠️ Error: " + err;
+        });
+      };
+
+      recognition.onerror = function(event) {
+        document.getElementById("estado").innerText = "❌ Error al reconocer voz: " + event.error;
+      };
+
+      recognition.start();
+    }
+  </script>
 </body>
 </html>
